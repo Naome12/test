@@ -13,7 +13,7 @@ let userId = req.body.userId
     let users = new UserModel({
         name:name,
         email:email,
-        userId:userId,
+        userId:userId
     })
     users.save().then(users=>console.log('user added')).catch(err=>console.log(err.message))
  
@@ -45,15 +45,18 @@ const text = (req,res)=>{
 // }
 
 const update = async(req,res) =>{
+   // let userId = req.body.userId
+   // let name = req.body.name
+   let userId = req.body.userId
    let email = req.body.email
-   let user = await userModel.findOne({email})
-
-   let updateUser = await userModel.findOneAndUpdate({email},req.body)
+   let name = req.body.name
+   let updateUser = await userModel.findOneAndUpdate({userId,email,name})
    if(updateUser){
-      res.json({user})
+      res.json({updateUser})
    }else{
       res.json({message: "error"})
    }
+   console.log('yeah')
 }
 
 const register = (req,res)=>{
@@ -63,19 +66,27 @@ const register = (req,res)=>{
 
 const delet =async (req,res)=>{
    let userId = req.body.userId
-let del = await userModel.findOne({userId})
+// let del = await userModel.findOne({userId})
 let deleteUser =await userModel.findOneAndDelete({userId},req.body)
 if(deleteUser){
    res.json('deleted')
 }else{
    res.json({message: "error"})
 }
+}
+
+const gete =(req,res)=>{
+   UserModel.find()
+   .then(users => res.send(users))
+   .catch(err => res.send(err).status(404));
 
 }
+
 module.exports = {
     user,
     text,
     update,
     register,
-    delet
+    delet,
+    gete
 }
